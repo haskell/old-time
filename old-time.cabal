@@ -15,5 +15,5 @@ include-dirs: include
 includes:	HsTime.h
 install-includes:	HsTime.h
 extensions:	CPP, ForeignFunctionInterface
-build-depends: base
+build-depends: base, old-locale
 
