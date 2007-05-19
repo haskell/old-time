@@ -2,7 +2,7 @@
 -- |
 -- Module      :  System.Time
 -- Copyright   :  (c) The University of Glasgow 2001
--- License     :  BSD-style (see the file libraries/base/LICENSE)
+-- License     :  BSD-style (see the file libraries/old-time/LICENSE)
 -- 
 -- Maintainer  :  libraries@haskell.org
 -- Stability   :  provisional
@@ -99,7 +99,7 @@ module System.Time
      ) where
 
 #ifdef __GLASGOW_HASKELL__
-#include "HsBase.h"
+#include "HsTime.h"
 #endif
 
 #ifdef __NHC__
