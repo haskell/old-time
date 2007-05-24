@@ -11,8 +11,10 @@ import System.Environment
 main :: IO ()
 main = do args <- getArgs
           let (ghcArgs, args') = extractGhcArgs args
-              (_, args'') = extractConfigureArgs args'
+              (confArgs, args'') = extractConfigureArgs args'
               hooks = defaultUserHooks {
+                  postConf = add_configure_options confArgs
+                           $ postConf defaultUserHooks,
                   buildHook = add_ghc_options ghcArgs
                             $ buildHook defaultUserHooks }
           withArgs args'' $ defaultMainWithHooks hooks
@@ -41,6 +43,13 @@ removePrefix _  "" = Nothing
 removePrefix (x:xs) (y:ys)
  | x == y = removePrefix xs ys
  | otherwise = Nothing
+
+type PostConfHook = Args -> ConfigFlags -> PackageDescription -> LocalBuildInfo
+                 -> IO ()
+
+add_configure_options :: [String] -> PostConfHook -> PostConfHook
+add_configure_options args f as cfs pd lbi
+ = f (as ++ args) cfs pd lbi
 
 type Hook a = PackageDescription -> LocalBuildInfo -> UserHooks -> a -> IO ()
 
