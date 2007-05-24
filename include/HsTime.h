@@ -21,6 +21,9 @@
 #if HAVE_TIME_H
 #include <time.h>
 #endif
+#if HAVE_SYS_TIMEB_H
+#include <sys/timeb.h>
+#endif
 
 extern long *__hscore_timezone( void );
 extern char **__hscore_tzname( void );

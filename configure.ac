@@ -11,7 +11,7 @@ AC_ARG_WITH([cc],
 AC_PROG_CC()
 
 # check for specific header (.h) files that we are interested in
-AC_CHECK_HEADERS([sys/time.h time.h])
+AC_CHECK_HEADERS([sys/time.h sys/timeb.h time.h])
 
 AC_CHECK_FUNCS([ftime gmtime_r localtime_r gettimeofday])
 
