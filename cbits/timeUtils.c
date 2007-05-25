@@ -1,3 +1,4 @@
+#if defined(__GLASGOW_HASKELL__) || defined(__HUGS__)
 /* 
  * (c) The University of Glasgow 2002
  *
@@ -12,4 +13,5 @@ long *__hscore_timezone( void )
 
 char **__hscore_tzname( void )
 { return _tzname; }
+#endif
 #endif
