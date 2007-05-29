@@ -16,4 +16,4 @@ includes:	HsTime.h
 install-includes:	HsTime.h
 extensions:	CPP, ForeignFunctionInterface
 build-depends: base, old-locale
-
+nhc98-options: -K2M
