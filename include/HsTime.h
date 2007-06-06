@@ -7,6 +7,12 @@
 #define __TIMEUTILS_H__
 
 #include "HsTimeConfig.h"
+// Otherwise these clash with similar definitions from other packages:
+#undef PACKAGE_BUGREPORT
+#undef PACKAGE_NAME
+#undef PACKAGE_STRING
+#undef PACKAGE_TARNAME
+#undef PACKAGE_VERSION
 
 #if HAVE_GETTIMEOFDAY
 #  if HAVE_SYS_TIME_H
