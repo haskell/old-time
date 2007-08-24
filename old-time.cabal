@@ -17,3 +17,6 @@ install-includes:	HsTime.h HsTimeConfig.h
 extensions:	CPP, ForeignFunctionInterface
 build-depends: base, old-locale
 nhc98-options: -K2M
+extra-tmp-files:
+        config.log config.status autom4te.cache
+        include/HsTimeConfig.h
