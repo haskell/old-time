@@ -7,6 +7,7 @@ synopsis:	Time library.
 description:
 	This package provides the old time library.
     For new code, the new time library is recommended.
+build-type: Configure
 exposed-modules:
 	System.Time
 c-sources:
