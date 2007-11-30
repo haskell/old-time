@@ -8,10 +8,15 @@
 -- Stability   :  provisional
 -- Portability :  portable
 --
--- The standard Time library, providing standard functionality for clock
--- times, including timezone information (i.e, the functionality of
--- \"@time.h@\", adapted to the Haskell environment).  It follows RFC
--- 1129 in its use of Coordinated Universal Time (UTC).
+-- The standard time library from Haskell 98.  This library is
+-- deprecated, please look at "Data.Time" in the @time@ package
+-- instead.
+--
+-- "System.Time" provides functionality for clock times, including
+-- timezone information (i.e, the functionality of \"@time.h@\",
+-- adapted to the Haskell environment).  It follows RFC 1129 in its
+-- use of Coordinated Universal Time (UTC).
+--
 -----------------------------------------------------------------------------
 
 {-
