@@ -121,12 +121,11 @@ import Prelude
 
 import Data.Ix
 import System.Locale
-import System.IO.Unsafe
+import Foreign
 
 #ifdef __HUGS__
 import Hugs.Time ( getClockTimePrim, toCalTimePrim, toClockTimePrim )
 #else
-import Foreign
 import Foreign.C
 #endif
 
@@ -268,11 +267,11 @@ getClockTime = do
 -- may be either positive or negative.
 
 addToClockTime  :: TimeDiff  -> ClockTime -> ClockTime
-addToClockTime (TimeDiff year mon day hour min sec psec) 
+addToClockTime (TimeDiff year mon day hour minute sec psec)
 	       (TOD c_sec c_psec) = 
 	let
 	  sec_diff = toInteger sec +
-                     60 * toInteger min +
+                     60 * toInteger minute +
                      3600 * toInteger hour +
                      24 * 3600 * toInteger day
           (d_sec, d_psec) = (c_psec + psec) `quotRem` 1000000000000
@@ -482,7 +481,7 @@ clockToCalendarTime_reentrant fun is_utc (TOD secs psec) = do
 clockToCalendarTime_aux :: Bool -> Ptr CTm -> Integer -> IO CalendarTime
 clockToCalendarTime_aux is_utc p_tm psec = do
     sec   <-  (#peek struct tm,tm_sec  ) p_tm :: IO CInt
-    min   <-  (#peek struct tm,tm_min  ) p_tm :: IO CInt
+    minute <-  (#peek struct tm,tm_min  ) p_tm :: IO CInt
     hour  <-  (#peek struct tm,tm_hour ) p_tm :: IO CInt
     mday  <-  (#peek struct tm,tm_mday ) p_tm :: IO CInt
     mon   <-  (#peek struct tm,tm_mon  ) p_tm :: IO CInt
@@ -490,10 +489,10 @@ clockToCalendarTime_aux is_utc p_tm psec = do
     wday  <-  (#peek struct tm,tm_wday ) p_tm :: IO CInt
     yday  <-  (#peek struct tm,tm_yday ) p_tm :: IO CInt
     isdst <-  (#peek struct tm,tm_isdst) p_tm :: IO CInt
-    zone  <-  zone p_tm
+    zone' <-  zone p_tm
     tz    <-  gmtoff p_tm
     
-    tzname <- peekCString zone
+    tzname <- peekCString zone'
     
     let month  | mon >= 0 && mon <= 11 = toEnum (fromIntegral mon)
     	       | otherwise             = error ("toCalendarTime: illegal month value: " ++ show mon)
@@ -503,7 +502,7 @@ clockToCalendarTime_aux is_utc p_tm psec = do
 		month
 		(fromIntegral mday)
 		(fromIntegral hour)
-		(fromIntegral min)
+		(fromIntegral minute)
 		(fromIntegral sec)
 		psec
             	(toEnum (fromIntegral wday))
@@ -525,15 +524,15 @@ toClockTime (CalendarTime yr mon mday hour min sec psec
     s <- toClockTimePrim (yr-1900) (fromEnum mon) mday hour min sec tz
     return (TOD (fromIntegral s) psec)
 #else /* ! __HUGS__ */
-toClockTime (CalendarTime year mon mday hour min sec psec 
-			  _wday _yday _tzname tz isdst) =
+toClockTime (CalendarTime year mon mday hour minute sec psec
+			  _wday _yday _tzname tz _isdst) =
 
      -- `isDst' causes the date to be wrong by one hour...
      -- FIXME: check, whether this works on other arch's than Linux, too...
      -- 
      -- so we set it to (-1) (means `unknown') and let `mktime' determine
      -- the real value...
-    let isDst = -1 :: CInt in   -- if isdst then (1::Int) else 0
+    let isDst = -1 :: CInt in   -- if _isdst then (1::Int) else 0
 
     if psec < 0 || psec > 999999999999 then
         error "Time.toClockTime: picoseconds out of range"
@@ -543,7 +542,7 @@ toClockTime (CalendarTime year mon mday hour min sec psec
       unsafePerformIO $ do
       allocaBytes (#const sizeof(struct tm)) $ \ p_tm -> do
         (#poke struct tm,tm_sec  ) p_tm	(fromIntegral sec  :: CInt)
-        (#poke struct tm,tm_min  ) p_tm	(fromIntegral min  :: CInt)
+        (#poke struct tm,tm_min  ) p_tm	(fromIntegral minute :: CInt)
         (#poke struct tm,tm_hour ) p_tm	(fromIntegral hour :: CInt)
         (#poke struct tm,tm_mday ) p_tm	(fromIntegral mday :: CInt)
         (#poke struct tm,tm_mon  ) p_tm	(fromIntegral (fromEnum mon) :: CInt)
@@ -563,9 +562,9 @@ toClockTime (CalendarTime year mon mday hour min sec psec
         -- to compensate, we add the timezone difference to mktime's
         -- result.
         -- 
-        gmtoff <- gmtoff p_tm
+        gmtoffset <- gmtoff p_tm
         let realToInteger = round . realToFrac :: Real a => a -> Integer
-	    res = realToInteger t - fromIntegral tz + fromIntegral gmtoff
+	    res = realToInteger t - fromIntegral tz + fromIntegral gmtoffset
 	return (TOD res psec)
 #endif /* ! __HUGS__ */
 
@@ -582,7 +581,7 @@ calendarTimeToString  =  formatCalendarTime defaultTimeLocale "%c"
 -- function.
 
 formatCalendarTime :: TimeLocale -> String -> CalendarTime -> String
-formatCalendarTime l fmt (CalendarTime year mon day hour min sec _
+formatCalendarTime l fmt (CalendarTime year mon day hour minute sec _
                                        wday yday tzname _ _) =
         doFmt fmt
   where doFmt ('%':'-':cs) = doFmt ('%':cs) -- padding not implemented
@@ -606,7 +605,7 @@ formatCalendarTime l fmt (CalendarTime year mon day hour min sec _
         decode 'j' = show3 yday                      -- day of the year
         decode 'k' = show2' hour                     -- hours, 24-hour clock, no padding
         decode 'l' = show2' (to12 hour)              -- hours, 12-hour clock, no padding
-        decode 'M' = show2 min                       -- minutes
+        decode 'M' = show2 minute                    -- minutes
         decode 'm' = show2 (fromEnum mon+1)          -- numeric month
         decode 'n' = "\n"
         decode 'p' = (if hour < 12 then fst else snd) (amPm l) -- am or pm
@@ -668,7 +667,7 @@ timeDiffToString = formatTimeDiff defaultTimeLocale "%c"
 -- function.
 
 formatTimeDiff :: TimeLocale -> String -> TimeDiff -> String
-formatTimeDiff l fmt td@(TimeDiff year month day hour min sec _)
+formatTimeDiff l fmt (TimeDiff year month day hour minute sec _)
  = doFmt fmt
   where 
    doFmt ""         = ""
@@ -682,7 +681,7 @@ formatTimeDiff l fmt td@(TimeDiff year month day hour min sec _)
       'B' -> fst (months l !! fromEnum month)
       'b' -> snd (months l !! fromEnum month)
       'h' -> snd (months l !! fromEnum month)
-      'c' -> defaultTimeDiffFmt td
+      'c' -> defaultTimeDiffFmt
       'C' -> show2 (year `quot` 100)
       'D' -> doFmt "%m/%d/%y"
       'd' -> show2 day
@@ -691,7 +690,7 @@ formatTimeDiff l fmt td@(TimeDiff year month day hour min sec _)
       'I' -> show2 (to12 hour)
       'k' -> show2' hour
       'l' -> show2' (to12 hour)
-      'M' -> show2 min
+      'M' -> show2 minute
       'm' -> show2 (fromEnum month + 1)
       'n' -> "\n"
       'p' -> (if hour < 12 then fst else snd) (amPm l)
@@ -708,7 +707,7 @@ formatTimeDiff l fmt td@(TimeDiff year month day hour min sec _)
       '%' -> "%"
       c   -> [c]
 
-   defaultTimeDiffFmt (TimeDiff year month day hour min sec _) =
+   defaultTimeDiffFmt =
        foldr (\ (v,s) rest -> 
                   (if v /= 0 
                      then show v ++ ' ':(addS v s)
@@ -716,7 +715,7 @@ formatTimeDiff l fmt td@(TimeDiff year month day hour min sec _)
                      else "") ++ rest
              )
              ""
-             (zip [year, month, day, hour, min, sec] (intervals l))
+             (zip [year, month, day, hour, minute, sec] (intervals l))
 
    addS v s = if abs v == 1 then fst s else snd s
 
