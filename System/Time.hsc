@@ -492,7 +492,7 @@ clockToCalendarTime_aux is_utc p_tm psec = do
     zone' <-  zone p_tm
     tz    <-  gmtoff p_tm
     
-    tzname <- peekCString zone'
+    tzname' <- peekCString zone'
     
     let month  | mon >= 0 && mon <= 11 = toEnum (fromIntegral mon)
     	       | otherwise             = error ("toCalendarTime: illegal month value: " ++ show mon)
@@ -507,7 +507,7 @@ clockToCalendarTime_aux is_utc p_tm psec = do
 		psec
             	(toEnum (fromIntegral wday))
 		(fromIntegral yday)
-		(if is_utc then "UTC" else tzname)
+		(if is_utc then "UTC" else tzname')
 		(if is_utc then 0     else fromIntegral tz)
 		(if is_utc then False else isdst /= 0))
 #endif /* ! __HUGS__ */
@@ -582,7 +582,7 @@ calendarTimeToString  =  formatCalendarTime defaultTimeLocale "%c"
 
 formatCalendarTime :: TimeLocale -> String -> CalendarTime -> String
 formatCalendarTime l fmt (CalendarTime year mon day hour minute sec _
-                                       wday yday tzname _ _) =
+                                       wday yday tzname' _ _) =
         doFmt fmt
   where doFmt ('%':'-':cs) = doFmt ('%':cs) -- padding not implemented
         doFmt ('%':'_':cs) = doFmt ('%':cs) -- padding not implemented
@@ -634,7 +634,7 @@ formatCalendarTime l fmt (CalendarTime year mon day hour minute sec _
         decode 'x' = doFmt (dateFmt l)               -- locale's preferred way of printing dates.
         decode 'Y' = show year                       -- year, including century.
         decode 'y' = show2 (year `rem` 100)          -- year, within century.
-        decode 'Z' = tzname                          -- timezone name
+        decode 'Z' = tzname'                         -- timezone name
         decode '%' = "%"
         decode c   = [c]
 
