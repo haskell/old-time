@@ -1,3 +1,7 @@
+{-# OPTIONS_GHC -fno-warn-unused-binds #-}
+-- XXX with some combinations of #defines we get warnings, e.g.
+-- Warning: Defined but not used: `throwAwayReturnPointer'
+
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  System.Time
