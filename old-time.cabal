@@ -3,7 +3,8 @@ version:	1.0
 license:	BSD3
 license-file:	LICENSE
 maintainer:	libraries@haskell.org
-synopsis:	Time library.
+synopsis:	Time library
+category:	System
 description:
 	This package provides the old time library.
     For new code, the new time library is recommended.
