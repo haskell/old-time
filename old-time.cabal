@@ -10,7 +10,6 @@ description:
 	This package provides the old time library.
     For new code, the new time library is recommended.
 build-type: Configure
-nhc98-options: -K2M
 extra-source-files:
         config.guess config.sub install-sh
         configure.ac configure
@@ -30,6 +29,7 @@ Library
     install-includes:	HsTime.h HsTimeConfig.h
     extensions:	CPP, ForeignFunctionInterface
     build-depends: base, old-locale
+    nhc98-options: -K2M
 
 source-repository head
     type:     darcs
