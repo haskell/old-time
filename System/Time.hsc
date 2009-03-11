@@ -585,7 +585,7 @@ calendarTimeToString  =  formatCalendarTime defaultTimeLocale "%c"
 -- function.
 
 formatCalendarTime :: TimeLocale -> String -> CalendarTime -> String
-formatCalendarTime l fmt (CalendarTime year mon day hour minute sec _
+formatCalendarTime l fmt cal@(CalendarTime year mon day hour minute sec _
                                        wday yday tzname' _ _) =
         doFmt fmt
   where doFmt ('%':'-':cs) = doFmt ('%':cs) -- padding not implemented
@@ -618,7 +618,8 @@ formatCalendarTime l fmt (CalendarTime year mon day hour minute sec _
         decode 'T' = doFmt "%H:%M:%S"
         decode 't' = "\t"
         decode 'S' = show2 sec			     -- seconds
-        decode 's' = show2 sec			     -- number of secs since Epoch. (ToDo.)
+        decode 's' = let TOD esecs _ = toClockTime cal in show esecs
+                                                     -- number of secs since Epoch.
         decode 'U' = show2 ((yday + 7 - fromEnum wday) `div` 7) -- week number, starting on Sunday.
         decode 'u' = show (let n = fromEnum wday in  -- numeric day of the week (1=Monday, 7=Sunday)
                            if n == 0 then 7 else n)
