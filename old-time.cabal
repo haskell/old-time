@@ -28,7 +28,7 @@ Library
     includes:	HsTime.h
     install-includes:	HsTime.h HsTimeConfig.h
     extensions:	CPP, ForeignFunctionInterface
-    build-depends: base, old-locale
+    build-depends: base >= 3 && < 5, old-locale
     nhc98-options: -K2M
 
 source-repository head
