@@ -731,14 +731,14 @@ formatTimeDiff l fmt (TimeDiff year month day hour minute sec _)
 type CTm = () -- struct tm
 
 #if HAVE_LOCALTIME_R
-foreign import ccall unsafe "time.h localtime_r"
+foreign import ccall unsafe "HsTime.h __hscore_localtime_r"
     localtime_r :: Ptr CTime -> Ptr CTm -> IO (Ptr CTm)
 #else
 foreign import ccall unsafe "time.h localtime"
     localtime   :: Ptr CTime -> IO (Ptr CTm)
 #endif
 #if HAVE_GMTIME_R
-foreign import ccall unsafe "time.h gmtime_r"
+foreign import ccall unsafe "HsTime.h __hscore_gmtime_r"
     gmtime_r    :: Ptr CTime -> Ptr CTm -> IO (Ptr CTm)
 #else
 foreign import ccall unsafe "time.h gmtime"
@@ -750,7 +750,7 @@ foreign import ccall unsafe "time.h mktime"
 #if HAVE_GETTIMEOFDAY
 type CTimeVal = ()
 type CTimeZone = ()
-foreign import ccall unsafe "time.h gettimeofday"
+foreign import ccall unsafe "HsTime.h __hscore_gettimeofday"
     gettimeofday :: Ptr CTimeVal -> Ptr CTimeZone -> IO CInt
 #elif HAVE_FTIME
 type CTimeB = ()
