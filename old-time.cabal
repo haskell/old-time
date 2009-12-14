@@ -11,6 +11,7 @@ description:
     For new code, the new time library is recommended.
 build-type: Configure
 extra-source-files:
+        aclocal.m4
         config.guess config.sub install-sh
         configure.ac configure
         include/HsTimeConfig.h.in
