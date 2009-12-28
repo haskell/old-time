@@ -184,7 +184,7 @@ min           0 .. 59
 sec           0 .. 61           [Allows for two leap seconds]
 picosec       0 .. (10^12)-1    [This could be over-precise?]
 yday          0 .. 365          [364 in non-Leap years]
-tz       -43200 .. 43200        [Variation from UTC in seconds]
+tz       -43200 .. 50400        [Variation from UTC in seconds]
 \end{verbatim}
 -}
 
@@ -541,7 +541,7 @@ toClockTime (CalendarTime year mon mday hour minute sec psec
 
     if psec < 0 || psec > 999999999999 then
         error "Time.toClockTime: picoseconds out of range"
-    else if tz < -43200 || tz > 43200 then
+    else if tz < -43200 || tz > 50400 then
         error "Time.toClockTime: timezone offset out of range"
     else
       unsafePerformIO $ do
