@@ -13,7 +13,7 @@
 -- Portability :  portable
 --
 -- The standard time library from Haskell 98.  This library is
--- deprecated, please look at "Data.Time" in the @time@ package
+-- deprecated, please look at @Data.Time@ in the @time@ package
 -- instead.
 --
 -- "System.Time" provides functionality for clock times, including
