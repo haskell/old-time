@@ -125,7 +125,8 @@ import Prelude
 
 import Data.Ix
 import System.Locale
-import Foreign
+import Foreign hiding (unsafePerformIO)
+import System.IO.Unsafe (unsafePerformIO)
 
 #ifdef __HUGS__
 import Hugs.Time ( getClockTimePrim, toCalTimePrim, toClockTimePrim )
