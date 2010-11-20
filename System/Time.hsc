@@ -405,7 +405,7 @@ gmtoff x = do
    --
    -- This module assumes the interpretation of tm_gmtoff, i.e., offsets
    -- are > 0 East of the Prime Meridian, so flip the sign.
-  return (- (if dst then (fromIntegral tz - 3600) else tz))
+  return (- (if dst then tz - 3600 else tz))
 # endif /* ! HAVE_DECL_ALTZONE */
 #endif  /* ! HAVE_TM_ZONE */
 #endif /* ! __HUGS__ */
