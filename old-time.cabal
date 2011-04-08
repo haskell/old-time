@@ -33,6 +33,6 @@ Library
     nhc98-options: -K2M
 
 source-repository head
-    type:     darcs
-    location: http://darcs.haskell.org/packages/old-time/
+    type:     git
+    location: http://darcs.haskell.org/packages/old-time.git/
 
