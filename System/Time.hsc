@@ -1,3 +1,7 @@
+{-# LANGUAGE CPP #-}
+#if __GLASGOW_HASKELL__ >= 701
+{-# LANGUAGE Trustworthy #-}
+#endif
 {-# OPTIONS_GHC -fno-warn-unused-binds #-}
 -- XXX with some combinations of #defines we get warnings, e.g.
 -- Warning: Defined but not used: `throwAwayReturnPointer'
