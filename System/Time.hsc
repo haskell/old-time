@@ -611,7 +611,7 @@ formatCalendarTime l fmt cal@(CalendarTime year mon day hour minute sec _
         decode 'e' = show2' day                      -- ditto, padded
         decode 'H' = show2 hour                      -- hours, 24-hour clock, padded
         decode 'I' = show2 (to12 hour)               -- hours, 12-hour clock
-        decode 'j' = show3 yday                      -- day of the year
+        decode 'j' = show3 (yday + 1)                -- day of the year
         decode 'k' = show2' hour                     -- hours, 24-hour clock, no padding
         decode 'l' = show2' (to12 hour)              -- hours, 12-hour clock, no padding
         decode 'M' = show2 minute                    -- minutes
