@@ -1,0 +1,9 @@
+GNUmakefile
+autom4te.cache
+config.log
+config.status
+configure
+dist-install
+ghc.mk
+include/HsTimeConfig.h
+include/HsTimeConfig.h.in
