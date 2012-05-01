@@ -250,11 +250,20 @@ getClockTime = do
   return (TOD (fromIntegral sec) ((fromIntegral usec) * 1000000))
 
 #elif HAVE_GETTIMEOFDAY
+
+# if defined(mingw32_HOST_OS)
+type Timeval_tv_sec = CLong
+type Timeval_tv_usec = CLong
+# else
+type Timeval_tv_sec = CTime
+type Timeval_tv_usec = CSUSeconds
+# endif
+
 getClockTime = do
   allocaBytes (#const sizeof(struct timeval)) $ \ p_timeval -> do
     throwErrnoIfMinus1_ "getClockTime" $ gettimeofday p_timeval nullPtr
-    sec  <- (#peek struct timeval,tv_sec)  p_timeval :: IO CTime
-    usec <- (#peek struct timeval,tv_usec) p_timeval :: IO CSUSeconds
+    sec  <- (#peek struct timeval,tv_sec)  p_timeval :: IO Timeval_tv_sec
+    usec <- (#peek struct timeval,tv_usec) p_timeval :: IO Timeval_tv_usec
     return (TOD (realToInteger sec) ((realToInteger usec) * 1000000))
  
 #elif HAVE_FTIME
