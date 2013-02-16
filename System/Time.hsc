@@ -119,7 +119,7 @@ import Prelude
 
 import Data.Ix
 import System.Locale
-import Foreign hiding (unsafePerformIO)
+import Foreign
 import System.IO.Unsafe (unsafePerformIO)
 
 #ifdef __HUGS__
