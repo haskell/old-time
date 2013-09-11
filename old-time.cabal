@@ -35,5 +35,5 @@ Library
 
 source-repository head
     type:     git
-    location: http://darcs.haskell.org/packages/old-time.git/
+    location: http://git.haskell.org/packages/old-time.git
 
