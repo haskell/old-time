@@ -24,6 +24,7 @@ extra-source-files:
     configure.ac
     include/HsTimeConfig.h.in
     install-sh
+    old-time.buildinfo
 
 extra-tmp-files:
     autom4te.cache
@@ -54,7 +55,6 @@ Library
     includes:     HsTime.h
     install-includes:
         HsTime.h
-        HsTimeConfig.h
 
     build-depends:
         base       == 4.7.*,
