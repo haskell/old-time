@@ -1,5 +1,3 @@
-{-# LANGUAGE CPP #-}
-{-# OPTIONS_GHC -fno-warn-unused-binds #-}
 #if __GLASGOW_HASKELL__ >= 701
 {-# LANGUAGE Trustworthy #-}
 #endif
