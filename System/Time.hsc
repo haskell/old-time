@@ -1,8 +1,6 @@
 #if __GLASGOW_HASKELL__ >= 701
 {-# LANGUAGE Trustworthy #-}
 #endif
--- XXX with some combinations of #defines we get warnings, e.g.
--- Warning: Defined but not used: `throwAwayReturnPointer'
 
 -----------------------------------------------------------------------------
 -- |
@@ -421,7 +419,7 @@ toCalendarTime :: ClockTime -> IO CalendarTime
 #ifdef __HUGS__
 toCalendarTime =  toCalTime False
 #elif HAVE_LOCALTIME_R
-toCalendarTime =  clockToCalendarTime_reentrant (throwAwayReturnPointer localtime_r) False
+toCalendarTime =  clockToCalendarTime_reentrant (_throwAwayReturnPointer localtime_r) False
 #else
 toCalendarTime =  clockToCalendarTime_static localtime False
 #endif
@@ -433,7 +431,7 @@ toUTCTime :: ClockTime -> CalendarTime
 #ifdef __HUGS__
 toUTCTime      =  unsafePerformIO . toCalTime True
 #elif HAVE_GMTIME_R
-toUTCTime      =  unsafePerformIO . clockToCalendarTime_reentrant (throwAwayReturnPointer gmtime_r) True
+toUTCTime      =  unsafePerformIO . clockToCalendarTime_reentrant (_throwAwayReturnPointer gmtime_r) True
 #else
 toUTCTime      =  unsafePerformIO . clockToCalendarTime_static gmtime True
 #endif
@@ -462,9 +460,9 @@ toCalTime toUTC (TOD s psecs)
                         , ctIsDST=not toUTC && (isdst/=0)
                         })
 #else /* ! __HUGS__ */
-throwAwayReturnPointer :: (Ptr CTime -> Ptr CTm -> IO (Ptr CTm))
-                       -> (Ptr CTime -> Ptr CTm -> IO (       ))
-throwAwayReturnPointer fun x y = fun x y >> return ()
+_throwAwayReturnPointer :: (Ptr CTime -> Ptr CTm -> IO (Ptr CTm))
+                        -> (Ptr CTime -> Ptr CTm -> IO (       ))
+_throwAwayReturnPointer fun x y = fun x y >> return ()
 
 #if !HAVE_LOCALTIME_R || !HAVE_GMTIME_R
 clockToCalendarTime_static :: (Ptr CTime -> IO (Ptr CTm)) -> Bool -> ClockTime
