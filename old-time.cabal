@@ -18,6 +18,7 @@ description:
 
 extra-source-files:
     aclocal.m4
+    changelog.md
     config.guess
     config.sub
     configure
