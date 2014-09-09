@@ -1,5 +1,9 @@
 # Changelog for [`old-time` package](http://hackage.haskell.org/package/old-time)
 
+## 1.1.0.3  *TBA*
+
+  * Bundled with GHC 7.10.1
+
 ## 1.1.0.2  *Mar 2014*
 
   * Bundled with GHC 7.8.1
