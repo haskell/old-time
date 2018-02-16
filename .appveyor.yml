@@ -1,0 +1,25 @@
+clone_folder: "c:\\WORK"
+
+environment:
+  global:
+    CABOPTS:  "--store-dir=C:\\SR --http-transport=plain-http"
+  matrix:
+    - GHCVER: "8.2.2"
+    - GHCVER: "8.0.2"
+
+#cache:
+# - "C:\\SR"
+
+install:
+ - "set PATH=C:\\Program Files\\Git\\mingw64\\bin;%PATH%"
+ - "choco install -y ghc --version %GHCVER%"
+ - "refreshenv"
+ - "cabal --version"
+ - "ghc   --version"
+ - "cabal %CABOPTS% update -v"
+
+build: off
+
+test_script:
+ - "echo packages:. > cabal.project"
+ - "cabal %CABOPTS% new-build -j1 all"
