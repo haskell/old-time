@@ -21,6 +21,6 @@ install:
 build: off
 
 test_script:
- - IF EXISTS configure.ac bash -c "autoreconf -i"
+ - IF EXIST configure.ac bash -c "autoreconf -i"
  - "echo packages:. > cabal.project"
  - "cabal %CABOPTS% new-build -j1 all"
