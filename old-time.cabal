@@ -1,14 +1,14 @@
+cabal-version:  >=1.10
 name:           old-time
-version:        1.1.0.3
+version:        1.1.0.4
 -- NOTE: Don't forget to update ./changelog.md
 license:        BSD3
 license-file:   LICENSE
-maintainer:     libraries@haskell.org
+maintainer:     https://github.com/haskell/old-time
 bug-reports:    https://github.com/haskell/old-time/issues
 synopsis:       Time library
 category:       System
 build-type:     Configure
-cabal-Version:  >=1.10
 description:
     This package provides the old time library.
     .
@@ -69,5 +69,7 @@ Library
     build-depends:
         base       >= 4.7 && < 5,
         old-locale == 1.0.*
+
+    build-tools: hsc2hs
 
     ghc-options: -Wall
