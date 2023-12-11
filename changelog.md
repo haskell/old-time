@@ -1,5 +1,10 @@
 # Changelog for [`old-time` package](http://hackage.haskell.org/package/old-time)
 
+## 1.1.0.4  *Dec 2023*
+
+  * Add `build-tools: hsc2hs` to `old-time.cabal` for compilation with GHC 8.
+    Fixes [issue #12](https://github.com/haskell/old-time/issues/12)
+
 ## 1.1.0.3  *Nov 2014*
 
   * Decoupled from GHC distribution
