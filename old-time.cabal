@@ -30,7 +30,6 @@ tested-with:
   GHC == 8.2.2
   GHC == 8.0.2
   GHC == 7.10.3
-  GHC == 7.8.4
 
 extra-source-files:
     aclocal.m4
