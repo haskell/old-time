@@ -10,3 +10,5 @@ ghc.mk
 include/HsTimeConfig.h
 include/HsTimeConfig.h.in
 /dist-newstyle/
+/.stack-work/
+/stack*.yaml.lock
