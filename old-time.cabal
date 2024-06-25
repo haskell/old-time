@@ -63,7 +63,6 @@ Library
         cbits/timeUtils.c
 
     include-dirs: include
-    includes:     HsTime.h
     install-includes:
         HsTime.h
 
