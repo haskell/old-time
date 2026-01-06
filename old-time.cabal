@@ -1,6 +1,6 @@
-cabal-version:  >=1.10
+cabal-version:  1.18
 name:           old-time
-version:        1.1.0.4
+version:        1.1.0.5
 -- NOTE: Don't forget to update ./changelog.md
 license:        BSD3
 license-file:   LICENSE
@@ -32,9 +32,11 @@ tested-with:
   GHC == 8.2.2
   GHC == 8.0.2
 
+extra-doc-files:
+    changelog.md
+
 extra-source-files:
     aclocal.m4
-    changelog.md
     config.guess
     config.sub
     configure

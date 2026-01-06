@@ -1,5 +1,12 @@
 # Changelog for [`old-time` package](http://hackage.haskell.org/package/old-time)
 
+## 1.1.0.5  *Jan 2026*
+
+  * Remove unused `includes` field in `.cabal` file
+    (Simon Hengel, [PR #17](https://github.com/haskell/old-time/pull/17)).
+  * Bump `cabal-version` to 1.18.
+  * Build tested with GHC 8.0 - 9.14.1.
+
 ## 1.1.0.4  *Dec 2023*
 
   * Add `build-tools: hsc2hs` to `old-time.cabal` for compilation with GHC 8.
