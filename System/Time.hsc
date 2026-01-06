@@ -1,6 +1,5 @@
-#if __GLASGOW_HASKELL__ >= 701
+{-# LANGUAGE CApiFFI #-}
 {-# LANGUAGE Trustworthy #-}
-#endif
 
 -----------------------------------------------------------------------------
 -- |
@@ -367,10 +366,10 @@ gmtoff x    = (#peek struct tm,tm_gmtoff) x
 #   define tzname _tzname
 #  endif
 #  ifndef mingw32_HOST_OS
-foreign import ccall unsafe "time.h &tzname" tzname :: Ptr CString
+foreign import capi unsafe "time.h &tzname" tzname :: Ptr CString
 #  else
-foreign import ccall unsafe "__hscore_timezone" timezone :: Ptr CLong
-foreign import ccall unsafe "__hscore_tzname"   tzname :: Ptr CString
+foreign import capi unsafe "__hscore_timezone" timezone :: Ptr CLong
+foreign import capi unsafe "__hscore_tzname"   tzname :: Ptr CString
 #  endif
 zone x = do
   dst <- (#peek struct tm,tm_isdst) x
@@ -382,8 +381,8 @@ zone x = do
 
 -- Get the offset in secs from UTC, if (struct tm) doesn't supply it. */
 # if HAVE_DECL_ALTZONE
-foreign import ccall "&altzone"  altzone  :: Ptr CTime
-foreign import ccall "&timezone" timezone :: Ptr CTime
+foreign import capi "&altzone"  altzone  :: Ptr CTime
+foreign import capi "&timezone" timezone :: Ptr CTime
 gmtoff x = do
   dst <- (#peek struct tm,tm_isdst) x
   tz <- if dst then peek altzone else peek timezone
@@ -391,7 +390,7 @@ gmtoff x = do
 # else /* ! HAVE_DECL_ALTZONE */
 
 #if !defined(mingw32_HOST_OS)
-foreign import ccall "time.h &timezone" timezone :: Ptr CLong
+foreign import capi "time.h &timezone" timezone :: Ptr CLong
 #endif
 
 -- Assume that DST offset is 1 hour ...
@@ -731,35 +730,35 @@ formatTimeDiff l fmt (TimeDiff year month day hour minute sec _)
 type CTm = () -- struct tm
 
 #if HAVE_LOCALTIME_R
-foreign import ccall unsafe "HsTime.h __hscore_localtime_r"
+foreign import capi unsafe "HsTime.h __hscore_localtime_r"
     localtime_r :: Ptr CTime -> Ptr CTm -> IO (Ptr CTm)
 #else
-foreign import ccall unsafe "time.h localtime"
+foreign import capi unsafe "time.h localtime"
     localtime   :: Ptr CTime -> IO (Ptr CTm)
 #endif
 #if HAVE_GMTIME_R
-foreign import ccall unsafe "HsTime.h __hscore_gmtime_r"
+foreign import capi unsafe "HsTime.h __hscore_gmtime_r"
     gmtime_r    :: Ptr CTime -> Ptr CTm -> IO (Ptr CTm)
 #else
-foreign import ccall unsafe "time.h gmtime"
+foreign import capi unsafe "time.h gmtime"
     gmtime      :: Ptr CTime -> IO (Ptr CTm)
 #endif
-foreign import ccall unsafe "time.h mktime"
+foreign import capi unsafe "time.h mktime"
     mktime      :: Ptr CTm   -> IO CTime
 
 #if HAVE_GETTIMEOFDAY
 type CTimeVal = ()
 type CTimeZone = ()
-foreign import ccall unsafe "HsTime.h __hscore_gettimeofday"
+foreign import capi unsafe "HsTime.h __hscore_gettimeofday"
     gettimeofday :: Ptr CTimeVal -> Ptr CTimeZone -> IO CInt
 #elif HAVE_FTIME
 type CTimeB = ()
 #ifndef mingw32_HOST_OS
-foreign import ccall unsafe "time.h ftime" ftime :: Ptr CTimeB -> IO CInt
+foreign import capi unsafe "time.h ftime" ftime :: Ptr CTimeB -> IO CInt
 #else
-foreign import ccall unsafe "time.h ftime" ftime :: Ptr CTimeB -> IO ()
+foreign import capi unsafe "time.h ftime" ftime :: Ptr CTimeB -> IO ()
 #endif
 #else
-foreign import ccall unsafe "time.h time" time :: Ptr CTime -> IO CTime
+foreign import capi unsafe "time.h time" time :: Ptr CTime -> IO CTime
 #endif
 #endif /* ! __HUGS__ */
