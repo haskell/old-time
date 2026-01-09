@@ -280,7 +280,9 @@ addToClockTime (TimeDiff year mon day hour minute sec psec)
                      3600 * toInteger hour +
                      24 * 3600 * toInteger day
           (d_sec, d_psec) = (c_psec + psec) `quotRem` 1000000000000
-          cal      = toUTCTime (TOD (c_sec + sec_diff + d_sec) d_psec)
+
+          beforeAddingMonthsAndYears = TOD (c_sec + sec_diff + d_sec) d_psec
+          cal      = toUTCTime beforeAddingMonthsAndYears
           new_mon  = fromEnum (ctMonth cal) + r_mon
           month' = fst tmp
           yr_diff = snd tmp
@@ -293,7 +295,9 @@ addToClockTime (TimeDiff year mon day hour minute sec psec)
 
           year' = ctYear cal + year + r_yr + yr_diff
         in
-        toClockTime cal{ctMonth=month', ctYear=year'}
+        if year == 0 && mon == 0
+          then beforeAddingMonthsAndYears
+          else toClockTime cal{ctMonth=month', ctYear=year'}
 
 -- | @'diffClockTimes' t1 t2@ returns the difference between two clock
 -- times @t1@ and @t2@ as a 'TimeDiff'.
