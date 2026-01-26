@@ -76,3 +76,16 @@ Library
     build-tools: hsc2hs
 
     ghc-options: -Wall
+
+test-suite old-time-tests
+    type: exitcode-stdio-1.0
+    default-language: Haskell2010
+    ghc-options: -Wall
+    main-is: Tests.hs
+    hs-source-dirs: tests
+    build-depends:
+        base,
+        old-locale < 2,
+        old-time,
+        tasty < 2,
+        tasty-hunit < 1
