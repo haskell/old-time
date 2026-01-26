@@ -270,7 +270,10 @@ getClockTime = do
 -- | @'addToClockTime' d t@ adds a time difference @d@ and a
 -- clock time @t@ to yield a new clock time.  The difference @d@
 -- may be either positive or negative.
-
+--
+-- Strange things can happen when 'TimeDiff' has
+-- non-zero months and years, including but not limited
+-- to ±1 hour jump when passing in and out daylight saving time.
 addToClockTime  :: TimeDiff  -> ClockTime -> ClockTime
 addToClockTime (TimeDiff year mon day hour minute sec psec)
                (TOD c_sec c_psec) =
@@ -315,8 +318,10 @@ diffClockTimes (TOD sa pa) (TOD sb pb) =
               }
 
 
--- | converts a time difference to normal form.
-
+-- | Converts a time difference to normal form.
+--
+-- This function assumes that each month contains exactly 30 days
+-- and each year contains exactly 365 days, which is not true.
 normalizeTimeDiff :: TimeDiff -> TimeDiff
 -- FIXME: handle psecs properly
 -- FIXME: ?should be called by formatTimeDiff automagically?
